@@ -19,6 +19,13 @@ public class BeneficioEjbService implements BeneficioRemote {
     @Override
     @Transactional
     public void transfer(Long fromId, Long toId, BigDecimal amount) {
+        if (fromId == null || toId == null) {
+            throw new IllegalArgumentException("IDs de origem e destino devem ser informados");
+        }
+
+        if (fromId.equals(toId)) {
+            throw new IllegalArgumentException("Transferência para o mesmo benefício não é permitida");
+        }
 
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Valor da transferência deve ser maior que zero");
