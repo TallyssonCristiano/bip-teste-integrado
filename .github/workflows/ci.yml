@@ -5,6 +5,7 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -12,5 +13,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          
       - name: Build backend
-        run: mvn -B -f backend-module clean package
+        working-directory: backend-module
+        run: mvn -B clean package
