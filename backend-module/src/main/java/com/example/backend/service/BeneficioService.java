@@ -20,7 +20,7 @@ public class BeneficioService {
         this.beneficioRemote = beneficioRemote;
     }
 
-    public List<BeneficioEntity> listarTodos() {
+    public List<BeneficioEntity> findAll() {
         return repository.findAll();
     }
 
