@@ -1,0 +1,25 @@
+<div>
+  <h2>Transferir Benefício</h2>
+
+  <div style="margin-bottom:8px;">
+    <label style="display:inline-block; width:90px">Origem:</label>
+    <select [(ngModel)]="origemId" name="origem">
+      <option *ngFor="let b of beneficios" [value]="b.id" [disabled]="b.id === destinoId">{{ b.nome }}</option>
+    </select>
+  </div>
+
+  <div style="margin-bottom:8px;">
+    <label style="display:inline-block; width:90px">Destino:</label>
+    <select [(ngModel)]="destinoId" name="destino">
+      <option *ngFor="let b of beneficios" [value]="b.id" [disabled]="b.id === origemId">{{ b.nome }}</option>
+    </select>
+  </div>
+
+  <div style="margin-bottom:8px;">
+    <label style="display:inline-block; width:90px">Valor:</label>
+    <input type="number" [(ngModel)]="valor" name="valor" />
+  </div>
+
+  <button (click)="transfer()">Transferir</button>
+  <button (click)="cancel()">Cancelar</button>
+</div>

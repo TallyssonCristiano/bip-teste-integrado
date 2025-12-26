@@ -1,0 +1,28 @@
+<div>
+  <h2>{{ id ? 'Editar' : 'Criar' }} Benefício</h2>
+
+  <form (ngSubmit)="save()">
+    <div style="margin-bottom:8px;">
+      <label style="display:inline-block; width:90px">Nome:</label>
+      <input [(ngModel)]="beneficio.nome" name="nome" required />
+    </div>
+
+    <div style="margin-bottom:8px;">
+      <label style="display:inline-block; width:90px">Descrição:</label>
+      <input [(ngModel)]="beneficio.descricao" name="descricao" />
+    </div>
+
+    <div style="margin-bottom:8px;">
+      <label style="display:inline-block; width:90px">Valor:</label>
+      <input type="number" [(ngModel)]="beneficio.valor" name="valor" required />
+    </div>
+
+    <div style="margin-bottom:8px;">
+      <label style="display:inline-block; width:90px">Ativo:</label>
+      <input type="checkbox" [(ngModel)]="beneficio.ativo" name="ativo" />
+    </div>
+
+    <button type="submit">Salvar</button>
+    <button type="button" (click)="cancel()">Cancelar</button>
+  </form>
+</div>

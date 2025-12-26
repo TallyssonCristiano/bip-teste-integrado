@@ -1,6 +1,8 @@
 com\example\backend\controller\BeneficioController.class
 com\example\backend\exception\GlobalExceptionHandler.class
+com\example\backend\config\CorsConfig$1.class
 com\example\backend\repository\BeneficioRepository.class
 com\example\backend\service\BeneficioService.class
 com\example\backend\entity\BeneficioEntity.class
 com\example\backend\BackendApplication.class
+com\example\backend\config\CorsConfig.class

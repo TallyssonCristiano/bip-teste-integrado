@@ -10,8 +10,8 @@ describe('BeneficioService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(),        // opcional em muitos casos; mantido por compatibilidade
-        provideHttpClientTesting(), // novo provider que substitui HttpClientTestingModule
+        provideHttpClient(),       
+        provideHttpClientTesting(), 
         BeneficioService
       ]
     });

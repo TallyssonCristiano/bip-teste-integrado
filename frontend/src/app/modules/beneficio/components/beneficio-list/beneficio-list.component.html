@@ -1,0 +1,34 @@
+<div>
+  <h2>Benefícios</h2>
+  <button (click)="create()">Novo Benefício</button>
+
+  <table style="width:100%; border-collapse: collapse; margin-top:8px;">
+    <thead>
+      <tr>
+        <th style="text-align:left; padding:6px">ID</th>
+        <th style="text-align:left; padding:6px">Nome</th>
+        <th style="text-align:left; padding:6px">Descrição</th>
+        <th style="text-align:right; padding:6px">Valor</th>
+        <th style="text-align:center; padding:6px">Ativo</th>
+        <th style="padding:6px">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="beneficios.length === 0">
+        <td colspan="6" style="text-align:center; padding:6px;">Nenhum benefício cadastrado</td>
+      </tr>
+      <tr *ngFor="let b of beneficios">
+        <td style="padding:6px">{{ b.id }}</td>
+        <td style="padding:6px">{{ b.nome }}</td>
+        <td style="padding:6px">{{ b.descricao }}</td>
+        <td style="padding:6px; text-align:right;">{{ b.valor | number:'1.2-2' }}</td>
+        <td style="text-align:center; padding:6px">{{ b.ativo ? 'Sim' : 'Não' }}</td>
+        <td style="padding:6px">
+          <button (click)="edit(b.id!)">Editar</button>
+          <button (click)="remove(b.id!)">Remover</button>
+          <button (click)="transfer(b.id!)">Transferir</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
