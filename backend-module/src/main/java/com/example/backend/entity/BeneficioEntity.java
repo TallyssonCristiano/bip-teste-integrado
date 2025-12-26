@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "BENEFICIO")
+@Table(name = "BENEFICIO", schema = "dbo")
 public class BeneficioEntity {
 
     @Id
@@ -24,6 +24,7 @@ public class BeneficioEntity {
     private Boolean ativo = true;
 
     @Version
+    @Column(name = "[VERSION]")
     private Long version;
 
     // getters e setters

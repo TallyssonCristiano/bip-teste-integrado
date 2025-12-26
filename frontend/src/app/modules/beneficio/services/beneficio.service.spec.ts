@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { BeneficioService, Beneficio } from './beneficio.service';
 
 describe('BeneficioService', () => {
@@ -8,8 +9,11 @@ describe('BeneficioService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [BeneficioService]
+      providers: [
+        provideHttpClient(),        // opcional em muitos casos; mantido por compatibilidade
+        provideHttpClientTesting(), // novo provider que substitui HttpClientTestingModule
+        BeneficioService
+      ]
     });
     service = TestBed.inject(BeneficioService);
     httpMock = TestBed.inject(HttpTestingController);
@@ -26,6 +30,7 @@ describe('BeneficioService', () => {
 
     service.list().subscribe(b => expect(b.length).toBe(1));
 
+    // usar service['apiUrl'] se apiUrl for private
     const req = httpMock.expectOne(service['apiUrl']);
     expect(req.request.method).toBe('GET');
     req.flush(mockBeneficios);
