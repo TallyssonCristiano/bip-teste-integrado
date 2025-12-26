@@ -1,43 +1,137 @@
-# 🏗️ Desafio Fullstack Integrado
-🚨 Instrução Importante (LEIA ANTES DE COMEÇAR)
-❌ NÃO faça fork deste repositório.
+# Desafio Fullstack Integrado — bip-teste-integrado
 
-Este repositório é fornecido como modelo/base. Para realizar o desafio, você deve:
-✅ Opção correta (obrigatória)
-  Clique em “Use this template” (se este repositório estiver marcado como Template)
-OU
-  Clone este repositório e crie um NOVO repositório público em sua conta GitHub.
-📌 O resultado deve ser um repositório próprio, independente deste.
+## 1. Visão geral
+Projeto fullstack para gerenciamento de **benefícios**. Implementação completa em camadas:
+- Frontend: **Angular 16+** (componentes standalone)
+- Backend: **Spring Boot (Java 17)** com Spring Data JPA/Hibernate
+- Banco: **SQL Server** (base `bip_teste_integrado`, autenticação Windows)
 
-## 🎯 Objetivo
-Criar solução completa em camadas (DB, EJB, Backend, Frontend), corrigindo bug em EJB e entregando aplicação funcional.
+O objetivo do desafio foi entregar uma solução funcional com:
+- CRUD completo para benefícios
+- Operação de transferência entre benefícios (validações e consistência)
+- Integração EJB/back-end conforme enunciado (quando aplicável)
+- Frontend consumindo a API e testes manuais do fluxo
 
-## 📦 Estrutura
-- db/: scripts schema e seed
-- ejb-module/: serviço EJB com bug a ser corrigido
-- backend-module/: backend Spring Boot
-- frontend/: app Angular
-- docs/: instruções e critérios
-- .github/workflows/: CI
+Todos os requisitos do desafio foram implementados, incluindo CRUD, transferência de benefícios e integração completa front ↔ back.
 
-## ✅ Tarefas do candidato
-1. Executar db/schema.sql e db/seed.sql
-2. Corrigir bug no BeneficioEjbService
-3. Implementar backend CRUD + integração com EJB
-4. Desenvolver frontend Angular consumindo backend
-5. Implementar testes
-6. Documentar (Swagger, README)
-7. Submeter via fork + PR
+---
 
-## 🐞 Bug no EJB
-- Transferência não verifica saldo, não usa locking, pode gerar inconsistência
-- Espera-se correção com validações, rollback, locking/optimistic locking
+## 2. Pré-requisitos locais
+- Node.js (recomendado: v18+ ou v20)  
+- Angular CLI (recomendado: v16+)  
+- Java 17 (JDK)  
+- Maven  
+- SQL Server (Express/Developer) rodando localmente no Windows  
+- (opcional) Visual Studio Code / Eclipse para edição
 
-## 📊 Critérios de avaliação
-- Arquitetura em camadas (20%)
-- Correção EJB (20%)
-- CRUD + Transferência (15%)
-- Qualidade de código (10%)
-- Testes (15%)
-- Documentação (10%)
-- Frontend (10%)
+---
+
+## 3. Banco de dados
+**Banco:** `bip_teste_integrado`  
+**Tipo de autenticação:** Windows Authentication (integrated security)
+
+Exemplo de `application.properties` usando Windows Authentication (Microsoft JDBC Driver):
+
+```properties
+spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=bip_teste_integrado;integratedSecurity=true;
+# Se preferir usar SQL auth, substitua por:
+# spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=bip_teste_integrado
+# spring.datasource.username=sa
+# spring.datasource.password=SuaSenha
+spring.jpa.hibernate.ddl-auto=update
+⚠️ Observação sobre Integrated Security: para integratedSecurity=true é necessário o driver Microsoft JDBC e o sqljdbc_auth.dll compatível com sua arquitetura no PATH do Windows. Se encontrar dificuldade, recomendo usar username/password para desenvolvimento local.
+
+4. Como rodar (passo a passo)
+Backend (Spring Boot)
+Ajuste application.properties conforme seu ambiente (veja acima).
+
+No diretório do backend (o repositório normalmente já contém a pasta backend ou backend-module), rode:
+
+bash
+
+mvn clean spring-boot:run
+O backend ficará disponível em:
+http://localhost:8080
+
+Frontend (Angular)
+Entre na pasta frontend:
+
+bash
+
+cd frontend
+npm install    # só se necessário
+ng serve
+O frontend ficará em:
+http://localhost:4200
+
+Certifique-se de que o backend esteja rodando ANTES do frontend para evitar erros de CORS/connection refused.
+
+5. Endpoints (API pública)
+Base URL: http://localhost:8080/api/v1/beneficios
+
+GET /api/v1/beneficios — listar todos
+
+GET /api/v1/beneficios/{id} — obter por id
+
+POST /api/v1/beneficios — criar
+
+PUT /api/v1/beneficios/{id} — atualizar
+
+DELETE /api/v1/beneficios/{id} — remover
+
+POST /api/v1/beneficios/transfer?origemId=X&destinoId=Y&valor=Z — transferir valor
+
+6. Testes implementados
+6.1 Backend (Spring Boot)
+
+Testes automatizados com JUnit 5 + Mockito:
+
+BeneficioServiceTest.java:
+
+listar() → valida retorno do repositório
+
+transferir() → valida transferência entre benefícios, atualizando corretamente valores de origem/destino
+
+BeneficioControllerIT.java (Integration Tests com MockMvc):
+
+testCreateAndGetBeneficio() → cria benefício e valida GET
+
+testUpdateBeneficio() → atualiza benefício e valida campos
+
+testDeleteBeneficio() → remove benefício
+
+testTransferBeneficio() → chama endpoint de transferência e verifica interação com BeneficioRemote
+
+Todos os testes de backend foram executados e passam com sucesso.
+
+6.2 Frontend (Angular)
+
+Testes unitários com Jasmine + TestBed:
+
+BeneficioService:
+
+list() → verifica chamada GET e retorno correto
+
+transfer() → verifica chamada POST para endpoint de transferência
+
+HttpClient mockado com HttpTestingController
+
+Observação: validações de entrada e regras de negócio (saldo insuficiente, origem ≠ destino, valor > 0) estão implementadas. O sistema usa @Version para optimistic locking (evita inconsistência em grande parte dos casos). Implementações de locking pessimista estavam disponíveis como alternativa, documentadas no código.
+
+7. Melhorias sugeridas
+
+Testes automatizados de integração adicionais
+
+Autenticação/Autorização (JWT, roles)
+
+Migração de banco com Flyway/Liquibase
+
+Containerização com Docker
+
+Observabilidade e logs estruturados
+
+Otimizações de performance e UX
+
+CI/CD via GitHub Actions
+
+Testes de carga e acessibilidade
